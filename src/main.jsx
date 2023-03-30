@@ -1,20 +1,25 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import "./index.css";
 import {
   BrowserRouter as Router,
   // Routes - враппер в который нужно обернуть все маршруты
   Routes,
-  //один путь ссылки
+  //route - один путь ссылки
   Route,
-  //
+  //navigate - перенаправляет один путь на другой
   Navigate,
+  //Link - замена <a /> для навигации на клиентской стороне
   Link,
+  //Outlet - место где появится дочерний ссылочный элемент 
   Outlet,
+  //useParams - хук который содержит динамическую часть ссылки
   useParams,
+  //NavLink - ссылка которая знает активная она в листе ссылок или нет
   NavLink,
+  //useNavigate - хук позволяющий переходить по ссылкам вместо Link (например по клику кнопки) и переносить по ссылке информацию state
   useNavigate,
+  //useLocation - возвращает информацию откуда был переход по ссылке и так же useLocation().state хранит инфо переданное с помощью Link state или useNavigate().navigate('linl, {state})
   useLocation,
 } from "react-router-dom";
 
