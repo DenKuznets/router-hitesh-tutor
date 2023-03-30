@@ -4,12 +4,18 @@ import App from "./App";
 import "./index.css";
 import {
   BrowserRouter as Router,
+  // Routes - враппер в который нужно обернуть все маршруты
   Routes,
+  //один путь ссылки
   Route,
+  //
   Navigate,
   Link,
   Outlet,
-  useParams
+  useParams,
+  NavLink,
+  useNavigate,
+  useLocation,
 } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -20,10 +26,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/myapps" element={<Navigate replace to="/learn" />} />
       <Route path="/learn" element={<Learn />}>
         <Route path="courses" element={<Courses />}>
-          <Route path=':courseid' element={<CourseId/>} />
+          <Route path=":courseid" element={<CourseId />} />
         </Route>
         <Route path="bundles" element={<Bundles />} />
       </Route>
+      <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   </Router>
 );
@@ -49,17 +56,35 @@ function Learn() {
       <Link className="btn btn-primary" to="/learn/bundles">
         bundle
       </Link>
-      <Outlet/>
+      <Outlet />
     </div>
   );
 }
 
 function Courses() {
+  const courseList = ["react", "angular", "vue", "nodejs"];
+  const randomCourseName =
+    courseList[Math.floor(Math.random() * courseList.length)];
   return (
     <div>
       <h1>Courses list</h1>
       <h4>Courses card</h4>
-      <Outlet/>
+      <p>More test</p>
+      <NavLink
+        style={({ isActive }) => {
+          return {
+            backgroundColor: isActive ? "pink" : "yellow",
+          };
+        }}
+        to={`/learn/courses/${randomCourseName}`}
+      >
+        {randomCourseName}
+      </NavLink>
+      <NavLink className="btn btn-light" to={`/learn/courses/tests`}>
+        tests
+      </NavLink>
+
+      <Outlet />
     </div>
   );
 }
@@ -75,11 +100,34 @@ function Bundles() {
 
 function CourseId() {
   // useParams передает динамическую часть ссылки которую мы указываем в Route с помощью двоеточия :
-  const gg = useParams();
-  console.log(gg);
+  const params = useParams();
+  const navigate = useNavigate();
   return (
     <div>
-      <h1>URL Params is : { gg.courseid }</h1>
+      <h1>URL Params is : {params.courseid}</h1>
+      {/* первый вариант передачи инфомарции по ссылке. С помоью хука navigate */}
+      <button
+        onClick={() => {
+          navigate("/dashboard", { state: "399" });
+        }}
+        className="btn btn-warning"
+      >
+        Price
+      </button>
+      {/* Второй способ передачи информации по ссылке. С помощью <Link /> state параметр */}
+      <Link to="/dashboard" state={"DJANGO"}>
+        Test link
+      </Link>
+    </div>
+  );
+}
+
+function Dashboard() {
+  const location = useLocation();
+  // console.log(location);
+  return (
+    <div>
+      <h1>Info that i got here is : {location.state}</h1>
     </div>
   );
 }
